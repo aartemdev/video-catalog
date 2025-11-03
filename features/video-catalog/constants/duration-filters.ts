@@ -1,0 +1,6 @@
+export const DURATION_RANGES = {
+  SHORT_MAX: 300,
+  MEDIUM_MIN: 300,
+  MEDIUM_MAX: 1200,
+  LONG_MIN: 1200,
+} as const
