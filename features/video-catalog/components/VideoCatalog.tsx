@@ -5,23 +5,26 @@ import { VideoGrid } from './VideoGrid'
 import { EmptyState } from './EmptyState'
 import { ErrorState } from './ErrorState'
 import { useVideoFilters } from '../hooks/userVideoFilters'
+import { useUrlParams } from '@/shared/lib/hooks/useUrlParams'
 
 export function VideoCatalog() {
-    const { data: videos, isLoading, isError, refetch } = useVideos()
+  const { data: videos, isLoading, isError, refetch } = useVideos()
+  
+  const { searchQuery, durationFilter } = useUrlParams()
+  
+  const { filteredVideos } = useVideoFilters(videos, searchQuery, durationFilter)
 
-    const { filteredVideos } = useVideoFilters(videos)
+  if (isError) {
+    return <ErrorState onRetry={() => refetch()} />
+  }
 
-    if (isError) {
-        return <ErrorState onRetry={() => refetch()} />
-    }
+  if (isLoading) {
+    return <VideoGrid isLoading />
+  }
 
-    if (isLoading) {
-        return <VideoGrid isLoading />
-    }
+  if (filteredVideos.length === 0) {
+    return <EmptyState />
+  }
 
-    if (filteredVideos.length === 0) {
-        return <EmptyState />
-    }
-
-    return <VideoGrid videos={filteredVideos} />
+  return <VideoGrid videos={filteredVideos} />
 }

@@ -3,11 +3,14 @@
 import { useMemo } from 'react'
 import { useDebounce } from './useDebounce'
 import { filterVideos } from '../utils/filterVideos'
+import { DurationFilter } from '@/features/video-filters/types/filter.types'
 import { Video } from '@/shared/lib/types/video.types'
-import { useUrlParams } from '@/shared/lib/hooks/useUrlParams'
 
-export function useVideoFilters(videos?: Video[]) {
-  const { searchQuery, durationFilter } = useUrlParams()
+export function useVideoFilters(
+  videos: Video[] | undefined,
+  searchQuery: string,
+  durationFilter: DurationFilter
+) {
   const debouncedSearch = useDebounce(searchQuery, 300)
 
   const filteredVideos = useMemo(() => {
@@ -17,8 +20,6 @@ export function useVideoFilters(videos?: Video[]) {
 
   return {
     filteredVideos,
-    searchQuery,
-    durationFilter,
     hasActiveFilters: searchQuery !== '' || durationFilter !== 'all',
   }
 }
