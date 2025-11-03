@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Search, X } from 'lucide-react'
 import { cn } from '@/shared/lib/utils/cn'
@@ -7,22 +8,38 @@ import { cn } from '@/shared/lib/utils/cn'
 export function SearchInput() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const query = searchParams.get('search') || ''
+  const [inputValue, setInputValue] = useState(searchParams.get('search') || '')
 
-  const handleSearch = (value: string) => {
-    const params = new URLSearchParams(searchParams.toString())
-
-    if (value) {
-      params.set('search', value)
-    } else {
-      params.delete('search')
+  useEffect(() => {
+    const urlSearch = searchParams.get('search') || ''
+    if (urlSearch !== inputValue) {
+      setInputValue(urlSearch)
     }
+  }, [searchParams])
 
-    router.push(`/?${params.toString()}`)
-  }
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const params = new URLSearchParams(searchParams.toString())
+
+      if (inputValue) {
+        params.set('search', inputValue)
+      } else {
+        params.delete('search')
+      }
+
+      const newUrl = `/?${params.toString()}`
+      const currentUrl = `/?${searchParams.toString()}`
+      
+      if (newUrl !== currentUrl) {
+        router.push(newUrl)
+      }
+    }, 300)
+
+    return () => clearTimeout(timer)
+  }, [inputValue, searchParams, router])
 
   const handleClear = () => {
-    handleSearch('')
+    setInputValue('')
   }
 
   return (
@@ -32,8 +49,8 @@ export function SearchInput() {
       <input
         type="search"
         placeholder="Поиск по названию..."
-        value={query}
-        onChange={(e) => handleSearch(e.target.value)}
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
         className={cn(
           'w-full pl-10 pr-10 py-2.5 rounded-lg',
           'border border-gray-300 bg-white',
@@ -43,7 +60,7 @@ export function SearchInput() {
         )}
       />
 
-      {query && (
+      {inputValue && (
         <button
           onClick={handleClear}
           className={cn(
