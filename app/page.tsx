@@ -1,6 +1,7 @@
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query'
 import { fetchVideos } from '@/shared/lib/api/videos.api'
-import { SearchInput } from '@/features/video-filters/components/SearchInput'
+import { VideoCatalog } from '@/features/video-catalog/components/VideoCatalog'
+import { FilterBar } from '@/features/video-filters/components/FilterBar'
 
 export default async function HomePage() {
   const queryClient = new QueryClient()
@@ -21,11 +22,11 @@ export default async function HomePage() {
             Коллекция обучающих видео по веб-разработке
           </p>
         </header>
-        <SearchInput />
-        FILTER BAR
+
+        <FilterBar />
 
         <HydrationBoundary state={dehydrate(queryClient)}>
-          VIDEOCATALOG
+          <VideoCatalog />
         </HydrationBoundary>
       </div>
     </main>

@@ -35,7 +35,7 @@ export function VideoDetailPlaceholder({ videoId }: Props) {
 
           <div className="max-w-md mx-auto mt-8 p-6 bg-blue-50 rounded-lg border border-blue-100">
             <p className="text-sm text-gray-700 leading-relaxed">
-              💡 Это демонстрационная страница.
+              Спасибо, что уделили время на проверку! ❤️
               <br />В реальном приложении здесь был бы видеоплеер, описание,
               комментарии и рекомендации.
             </p>

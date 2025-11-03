@@ -1,8 +1,21 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  reactCompiler: true,
-};
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+        pathname: '/**',
+      },
+    ],
+  },
+  
+  reactStrictMode: true,
 
-export default nextConfig;
+  experimental: {
+    optimizePackageImports: ['lucide-react'],
+  },
+}
+
+export default nextConfig
